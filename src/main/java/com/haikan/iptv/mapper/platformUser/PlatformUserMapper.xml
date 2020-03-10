@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haikan.iptv.mapper.platformUser.PlatformUserMapper" >
+	<!-- Result Map-->
+	<resultMap id="BaseResultMap" type="com.haikan.iptv.bean.platformUser.vo.PlatformUserVo" >
+		<result column="user_id" property="userId"/>
+		<result column="user_key" property="userKey"/>
+		<result column="login_name" property="loginName"/>
+		<result column="user_name" property="userName"/>
+		<result column="password" property="password"/>
+		<result column="role_id" property="roleId"/>
+		<result column="status" property="status"/>
+		<result column="create_time" property="createTime"/>
+		<result column="sex" property="sex"/>
+		<result column="mobile" property="mobile"/>
+		<result column="email" property="email"/>
+	</resultMap>
+
+	<!-- t_platform_user table all fields -->
+	<sql id="Base_Column_List" >
+			user_id,
+			user_key,
+			login_name,
+			user_name,
+			password,
+			sex,
+			mobile,
+			email
+	</sql>
+
+	<!-- 插入记录 -->
+	<insert id="insertUser" parameterType="com.haikan.iptv.bean.platformUser.PlatformUser" >
+		insert into t_platform_user(
+		user_id,
+		user_key,
+		login_name,
+		user_name,
+		password,
+		role_id,
+		status,
+		create_time,
+		sex,
+		mobile,
+		email
+		)values (
+		#{userId,jdbcType=VARCHAR},
+		#{userKey,jdbcType=VARCHAR},
+		#{loginName,jdbcType=VARCHAR},
+		#{userName,jdbcType=VARCHAR},
+		#{password,jdbcType=VARCHAR},
+		#{roleId,jdbcType=VARCHAR},
+		#{status,jdbcType=VARCHAR},
+		#{createTime,jdbcType=VARCHAR},
+		#{sex,jdbcType=VARCHAR},
+		#{mobile,jdbcType=VARCHAR},
+		#{email,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<!-- 根据id，修改记录-->
+	<update id="updateUser" parameterType="com.haikan.iptv.bean.platformUser.PlatformUser" >
+	 update t_platform_user set
+
+				user_id = #{userId,jdbcType=VARCHAR},
+				login_name = #{loginName,jdbcType=VARCHAR},
+				user_name = #{userName,jdbcType=VARCHAR},
+				password = #{password,jdbcType=VARCHAR},
+				role_id = #{roleId,jdbcType=VARCHAR},
+				status = #{status,jdbcType=VARCHAR},
+				create_time = #{createTime,jdbcType=VARCHAR},
+				sex = #{sex,jdbcType=VARCHAR},
+				mobile = #{mobile,jdbcType=VARCHAR},
+				email = #{email,jdbcType=VARCHAR}
+		where user_key = #{userKey}
+	</update>
+
+	<delete id="deleteUser" parameterType="com.haikan.iptv.bean.platformUser.PlatformUser">
+			delete from t_platform_user where user_key = #{userKey}
+	</delete>
+
+	<update id="updateUserBySelective" parameterType="com.haikan.iptv.bean.platformUser.PlatformUser" >
+		update t_platform_user
+		<set>
+					<if test="userId != null">
+						user_id = #{userId},
+					</if>
+
+					<if test="loginName != null and loginName != ''">
+					    login_name = #{loginName},
+					</if>
+					<if test="userName != null and userName != ''">
+					    user_name = #{userName},
+					</if>
+					<if test="password != null and password != ''">
+					    password = #{password},
+					</if>
+					<if test="roleId != null">
+					    role_id = #{roleId},
+					</if>
+					<if test="status != null">
+					    status = #{status},
+					</if>
+					<if test="createTime != null">
+					    create_time = #{createTime},
+					</if>
+					<if test="sex != null">
+					    sex = #{sex},
+					</if>
+					<if test="mobile != null and mobile != ''">
+					    mobile = #{mobile},
+					</if>
+					<if test="email != null and email != ''">
+					    email = #{email},
+					</if>
+		</set>
+		where user_key = #{userKey}
+	</update>
+	<!-- 自定义sql -->
+	<!-- 查询条件 -->
+	<sql id="Example_Where_Clause">
+		where 1=1
+		<trim  suffixOverrides="," >
+				<if test="userId != null">
+				    and user.user_id = #{userId}
+				</if>
+				<if test="userKey != null and userKey != ''">
+					and user_key = #{userKey}
+				</if>
+				<if test="loginName != null and loginName != ''">
+				    and user.login_name = #{loginName}
+				</if>
+				<if test="userName != null and userName != ''">
+				    and user.user_name like concat('%', #{userName}, '%' )
+				</if>
+				<if test="password != null and password != ''">
+				    and user.password = #{password}
+				</if>
+				<if test="roleId != null">
+				    and user.role_id = #{roleId}
+				</if>
+				<if test="status != null">
+				    and user.status = #{status}
+				</if>
+				<if test="createTime != null">
+				    and user.create_time = #{createTime}
+				</if>
+				<if test="sex != null">
+				    and user.sex = #{sex}
+				</if>
+				<if test="mobile != null and mobile != ''">
+				    and user.mobile = #{mobile}
+				</if>
+				<if test="email != null and email != ''">
+				    and user.email = #{email}
+				</if>
+		</trim>
+	</sql>
+	<!-- bean 扩展字段  -->
+	<resultMap id="BaseResultMapVo" extends="BaseResultMap" type="com.haikan.iptv.bean.platformUser.vo.PlatformUserVo" >
+		<result column="role_name" property="roleName"/>
+		<result column="sexName" property="sexName"/>
+		<result column="statusName" property="statusName"/>
+	</resultMap>
+	<!-- t_platform_user 信息 -->
+
+	<select id="getUserVoById"  resultMap="BaseResultMapVo" parameterType="Object">
+		select 
+		status,
+		create_time,
+		role_id,
+		<include refid="Base_Column_List" />
+		from t_platform_user
+		where user_id = #{userId}
+	</select>
+	 
+	 <select id="getUserCountByQuery" resultType="java.lang.Long"  parameterType="Object">
+		select count(1)
+		from t_platform_user user
+		<include refid="Example_Where_Clause"/>
+	</select>	
+	 
+	<!-- 查询t_platform_user列表 -->
+	<select id="getUserListByQuery" resultMap="BaseResultMapVo"  parameterType="Object">
+		select 
+		user.status,
+		user.create_time,
+		role_name,
+		user.role_id,
+		(
+			CASE user.status
+			WHEN '0' THEN
+			'禁用'
+			WHEN '1' THEN
+			'启用'
+			ELSE
+			''
+			END
+		)  as statusName,
+		<include refid="Base_Column_List"/>
+		from t_platform_user user
+		left JOIN t_role role on `user`.role_id = role.role_id
+		<include refid="Example_Where_Clause"/>
+		order by user.create_time desc
+	</select>	
+	
+	<select id="checkUserLoginName" resultMap="BaseResultMapVo"  parameterType="Object">
+		select 
+		status,
+		role_id,
+		<include refid="Base_Column_List"/>
+		from t_platform_user 
+		where (login_name = #{loginName} or mobile  = #{mobile})
+		<if test="userKey != null and userKey != ''">
+			and user_key != #{userKey}
+		</if>
+	</select>
+
+	<select id="getUserVoByKey"  resultMap="BaseResultMapVo" parameterType="Object">
+		select
+			user.role_id,
+			role.role_name,
+			(
+				CASE sex
+					WHEN '1' THEN
+						'男'
+					WHEN '2' THEN
+						'女'
+					ELSE
+						''
+					END
+			)
+			as sexName,
+		 	user.login_name,
+			user.user_name,
+			user.password,
+			user.sex,
+			user.mobile,
+			user.email,
+			user.user_id,
+			user.user_key,
+			user.create_time
+		from
+			t_platform_user user
+		left JOIN t_role role on `user`.role_id = role.role_id
+		where user.user_key = #{userKey}
+	</select>
+	<!-- 更新用户状态 -->
+	<update id="updateUserStatus" parameterType="Object" >
+		update t_platform_user
+		<set>
+			<if test="status != null">
+				status = #{status},
+			</if>
+		</set>
+		where user_key = #{userKey}
+	</update>
+
+</mapper>   

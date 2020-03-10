@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haikan.iptv.mapper.version.VersionSqlMapper" >
+    <!--获取版本列表数据-->
+    <select id="getVersionList"  parameterType="com.haikan.iptv.bean.version.VersionBean" resultType="list">
+        select
+            version_key as versionKey,
+            version,
+            terminal,
+            update_url as updateUrl,
+            is_forced as isForced,
+            update_content as updateContent,
+            status,
+            creator,
+            create_time as createTime,
+            update_time as updateTime
+        from
+            t_version
+        where
+            1=1
+            <if test='version != null and version !="" '>
+                and version like CONCAT('%',#{version},'%')
+            </if>
+            <if test='status != null and status !="" '>
+                and status=#{status}
+            </if>
+
+            <if test='terminal != null and terminal !="" '>
+                and terminal=#{terminal}
+            </if>
+
+            <if test='isForced != null and isForced !="" '>
+                and is_forced=#{isForced}
+            </if>
+            order by id desc
+    </select>
+
+    <!--修改版本状态-->
+    <update id="modifyStatus" parameterType="com.haikan.iptv.bean.version.VersionBean">
+            update
+                t_version
+            set
+                status=#{t_version}
+            where
+                version_key=#{versionKey}
+    </update>
+
+    <!--修改版本信息-->
+    <update id="updateVersion" parameterType="com.haikan.iptv.bean.version.VersionBean">
+        update
+            t_version
+        set
+            version=#{version},
+            terminal=#{terminal},
+            update_url=#{updateUrl},
+            is_forced=#{isForced},
+            update_content=#{updateContent},
+            update_time=#{update_time}
+        where
+            1=1
+            and version_key=#{versionKey}
+    </update>
+
+    <!--新增版本信息-->
+    <insert id="addVersion" parameterType="com.haikan.iptv.bean.version.VersionBean">
+        insert  into
+            t_version
+            (
+                version_key,
+                version,
+                terminal,
+                update_url,
+                is_forced,
+                update_content,
+                status,
+                creator,
+                create_time,
+                update_time
+            )
+            values (
+                #{versionKey},
+                #{version},
+                #{terminal},
+                #{updateUrl},
+                #{isForced},
+                #{updateContent},
+                #{status},
+                #{creator},
+                #{createTime},
+                #{updateTime}
+            )
+    </insert>
+
+    <!--获取版本信息详情数据-->
+    <select id="getDataView" parameterType="com.haikan.iptv.bean.version.VersionBean" resultType="com.haikan.iptv.bean.version.VersionBean">
+        select
+            version_key as versionKey
+            version,
+            terminal,
+            update_url as updateUrl,
+            is_forced as isForced,
+            update_content as updateContent,
+            status
+        from
+            t_version
+        where
+            1=1
+            and version_key=#{versionKey}
+
+    </select>
+</mapper>

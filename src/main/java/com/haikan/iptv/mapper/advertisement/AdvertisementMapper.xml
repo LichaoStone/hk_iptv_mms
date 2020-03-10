@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haikan.iptv.mapper.advertisement.AdvertisementMapper" >
+	<!-- Result Map-->
+	<resultMap id="BaseResultMap" type="com.haikan.iptv.bean.advertisement.Advertisement" >
+		<result column="id" property="id"/>
+		<result column="adv_key" property="advKey"/>
+		<result column="adv_type" property="advType"/>
+		<result column="video_type" property="videoType"/>
+		<result column="adv_name" property="advName"/>
+		<result column="adv_img" property="advImg"/>
+		<result column="target_type" property="targetType"/>
+		<result column="target_url" property="targetUrl"/>
+		<result column="adv_belong" property="advBelong"/>
+		<result column="ordernum" property="ordernum"/>
+		<result column="begin_time" property="beginTime"/>
+		<result column="end_time" property="endTime"/>
+		<result column="status" property="status"/>
+		<result column="content" property="content"/>
+		<result column="create_time" property="createTime"/>
+		<result column="creator" property="creator"/>
+		<result column="update_time" property="updateTime"/>
+	</resultMap>
+	
+	<!-- t_advertisement table all fields -->
+	<sql id="Base_Column_List" >
+			id,
+			adv_key,
+			adv_type,
+			video_type,
+			adv_name,
+			adv_img,
+			target_type,
+			target_url,
+			adv_belong,
+			ordernum,
+			begin_time,
+			end_time,
+			status,
+			content,
+			create_time,
+			creator,
+			update_time
+	</sql>   
+	
+	<!-- 插入记录 -->
+	<insert id="insertAdvertisement" parameterType="com.haikan.iptv.bean.advertisement.Advertisement" >
+		insert into t_advertisement(
+				id,
+				adv_key,
+				adv_type,
+				video_type,
+				adv_name,
+				adv_img,
+				target_type,
+				target_url,
+				adv_belong,
+				ordernum,
+				begin_time,
+				end_time,
+				status,
+				content,
+				create_time,
+				creator,
+				update_time
+		)values (
+				#{id,jdbcType=VARCHAR},
+				#{advKey,jdbcType=VARCHAR},
+				#{advType,jdbcType=VARCHAR},
+				#{videoType,jdbcType=VARCHAR},
+				#{advName,jdbcType=VARCHAR},
+				#{advImg,jdbcType=VARCHAR},
+				#{targetType,jdbcType=VARCHAR},
+				#{targetUrl,jdbcType=VARCHAR},
+				#{advBelong,jdbcType=VARCHAR},
+				#{ordernum,jdbcType=VARCHAR},
+				#{beginTime,jdbcType=VARCHAR},
+				#{endTime,jdbcType=VARCHAR},
+				#{status,jdbcType=VARCHAR},
+				#{content,jdbcType=VARCHAR},
+				#{createTime,jdbcType=VARCHAR},
+				#{creator,jdbcType=VARCHAR},
+				#{updateTime,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<!-- 根据id，修改记录-->  
+	<update id="updateAdvertisement" parameterType="com.haikan.iptv.bean.advertisement.Advertisement" >
+	 	update t_advertisement set
+	 
+				id = #{id,jdbcType=VARCHAR},
+				adv_name = #{advName,jdbcType=VARCHAR},
+				adv_type = #{advType,jdbcType=VARCHAR},
+				video_type = #{videoType,jdbcType=VARCHAR},
+				adv_img = #{advImg,jdbcType=VARCHAR},
+				target_type = #{targetType,jdbcType=VARCHAR},
+				target_url = #{targetUrl,jdbcType=VARCHAR},
+				adv_belong = #{advBelong,jdbcType=VARCHAR},
+				ordernum = #{ordernum,jdbcType=VARCHAR},
+				begin_time = #{beginTime,jdbcType=VARCHAR},
+				end_time = #{endTime,jdbcType=VARCHAR},
+				status = #{status,jdbcType=VARCHAR},
+				content = #{content,jdbcType=VARCHAR},
+				create_time = #{createTime,jdbcType=VARCHAR},
+				creator = #{creator,jdbcType=VARCHAR},
+				update_time = #{updateTime,jdbcType=VARCHAR}
+		where adv_key = #{advKey}
+	</update>
+	
+	<delete id="deleteAdvertisement" parameterType="com.haikan.iptv.bean.advertisement.Advertisement">
+		delete from t_advertisement where adv_key = #{advKey}
+	</delete> 
+
+	<update id="updateAdvertisementBySelective" parameterType="com.haikan.iptv.bean.advertisement.Advertisement" >
+		update t_advertisement  
+		<set> 
+					<if test="id != null">
+					    id = #{id},
+					</if>
+					<if test="advName != null and advName != ''">
+					    adv_name = #{advName},
+					</if>
+					<if test="advImg != null and advImg != ''">
+					    adv_img = #{advImg},
+					</if>
+					<if test="targetType != null">
+					    target_type = #{targetType},
+					</if>
+					<if test="targetUrl != null and targetUrl != ''">
+					    target_url = #{targetUrl},
+					</if>
+					<if test="advBelong != null">
+					    adv_belong = #{advBelong},
+					</if>
+					<if test="ordernum != null">
+					    ordernum = #{ordernum},
+					</if>
+					<if test="beginTime != null">
+					    begin_time = #{beginTime},
+					</if>
+					<if test="endTime != null">
+					    end_time = #{endTime},
+					</if>
+					<if test="status != null">
+					    status = #{status},
+					</if>
+					<if test="content != null and content != ''">
+					    content = #{content},
+					</if>
+					<if test="createTime != null">
+					    create_time = #{createTime},
+					</if>
+					<if test="creator != null and creator != ''">
+					    creator = #{creator},
+					</if>
+
+		</set>
+		where adv_key = #{advKey}
+	</update> 
+	<!-- 自定义sql -->	 
+	<!-- 查询条件 -->
+	<sql id="Example_Where_Clause">
+		where status != -1
+		<trim  suffixOverrides="," >
+				<if test="id != null">
+				    and id = #{id}
+				</if>
+				<if test="advKey != null and advKey != ''">
+				    and adv_key = #{advKey}
+				</if>
+				<if test="advName != null and advName != ''">
+				    and adv_name LIKE CONCAT('%','${advName}','%')
+				</if>
+				<if test="advImg != null and advImg != ''">
+				    and adv_img = #{advImg}
+				</if>
+				<if test="targetType != null">
+				    and target_type = #{targetType}
+				</if>
+				<if test="advType != null">
+				    and adv_type = #{advType}
+				</if>
+				<if test="targetUrl != null and targetUrl != ''">
+				    and target_url = #{targetUrl}
+				</if>
+				<if test="advBelongList != null and advBelongList.size()>0">
+				    and adv_belong in (
+					<foreach collection="advBelongList" item="item" index="index" open="" separator="," close="">
+						#{item}
+					</foreach>
+					)
+				</if>
+				<if test="ordernum != null">
+				    and ordernum = #{ordernum}
+				</if>
+				<if test="null != beginTime">
+					AND (
+					     begin_time  between  #{beginTime}  and #{endTime}
+						<if test="null != endTime">
+							OR end_time between  #{beginTime}  and #{endTime}
+						</if>
+					    )
+				</if>
+				<if test="status != null">
+				    and status = #{status}
+				</if>
+				<if test="content != null and content != ''">
+				    and content = #{content}
+				</if>
+				<if test="createTime != null">
+				    and create_time = #{createTime}
+				</if>
+				<if test="creator != null and creator != ''">
+				    and creator = #{creator}
+				</if>
+				<if test="updateTime != null">
+				    and update_time = #{updateTime}
+				</if>
+		</trim>
+		order by ordernum,create_time desc
+	</sql>
+	<!-- bean 扩展字段  -->
+	<resultMap id="BaseResultMapVo" extends="BaseResultMap" type="com.haikan.iptv.bean.advertisement.vo.AdvertisementVo" >
+	
+	</resultMap>
+	<!-- t_advertisement 信息 -->
+	<select id="getAdvertisementVoById"  resultMap="BaseResultMapVo" parameterType="Object">
+		select 
+		<include refid="Base_Column_List" /> 
+		from t_advertisement
+		where adv_key = #{advKey}
+	</select>
+	 
+	 <select id="getAdvertisementCountByQuery" resultType="java.lang.Long"  parameterType="Object">
+		select count(1)
+		from t_advertisement 
+		<include refid="Example_Where_Clause"/>
+	</select>	
+	 
+	<!-- 查询t_advertisement列表 -->
+	<select id="getAdvertisementListByQuery" resultMap="BaseResultMapVo"  parameterType="Object">
+		select 
+		<include refid="Base_Column_List"/>
+		from t_advertisement 
+		<include refid="Example_Where_Clause"/>
+	</select>
+	<select id="getVideoTypeListByQuery" resultMap="BaseResultMapVo"  parameterType="Object">
+		select
+		classify_key adv_key,name adv_name
+		from t_classify
+		where  type=1 and level=1
+		order by create_time desc
+	</select>
+	<!--获得广告发布数量-->
+	<select id="getAdvReleaseCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1)
+		from t_advertisement
+		where status=0
+	</select>
+</mapper>   
